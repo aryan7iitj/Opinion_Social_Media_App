@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "131105019330",
+    "project_id": "opinion-8509e",
+    "storage_bucket": "opinion-8509e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:131105019330:android:d90463a12e9f9c4f70725b",
+        "android_client_info": {
+          "package_name": "com.example.opinion"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "131105019330-ttculitgl7np2nflfvboi73r94bjga9o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCRMhlOZ2lvT7VOZROAR7APOWGHfxn3GT4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "131105019330-ttculitgl7np2nflfvboi73r94bjga9o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
