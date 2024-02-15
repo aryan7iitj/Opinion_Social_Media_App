@@ -26,7 +26,8 @@ class _HomePageState extends State<HomePage> {
       FirebaseFirestore.instance.collection("User Posts").add({
         'UserEmail': currentUser.email,
         'Message': textController.text,
-        'Timestamp': Timestamp.now()
+        'Timestamp': Timestamp.now(),
+        'Likes': [],
       });
     }
 
@@ -67,6 +68,8 @@ class _HomePageState extends State<HomePage> {
                             final post = snapshot.data!.docs[index];
                             return WallPost(
                                 message: post['Message'],
+                                postId: post.id,
+                                likes: List<String>.from(post['Likes'] ?? []),
                                 user: post['UserEmail']);
                           },
                         );
@@ -95,8 +98,13 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
-            Text("Logged in as: " + currentUser.email!, style: TextStyle(color: Colors.grey[500]),),
-            const SizedBox(height: 50,),
+            Text(
+              "Logged in as: " + currentUser.email!,
+              style: TextStyle(color: Colors.grey[500]),
+            ),
+            const SizedBox(
+              height: 50,
+            ),
           ],
         ),
       ),
