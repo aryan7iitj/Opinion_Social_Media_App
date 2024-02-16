@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:opinion/components/text_field.dart';
 import 'package:opinion/components/wall_post.dart';
 import 'package:opinion/components/drawer.dart';
+import 'package:opinion/helper/helper_methods.dart';
 import 'package:opinion/main.dart';
 import 'package:opinion/pages/profile_page.dart';
 
@@ -81,7 +82,9 @@ class _HomePageState extends State<HomePage> {
                                 message: post['Message'],
                                 postId: post.id,
                                 likes: List<String>.from(post['Likes'] ?? []),
+                                time: formatDate(post['Timestamp']),
                                 user: post['UserEmail']);
+                                
                           },
                         );
                       } else if (snapshot.hasError) {
