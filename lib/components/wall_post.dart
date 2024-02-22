@@ -7,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:opinion/components/comment.dart';
 import 'package:opinion/components/comment_button.dart';
+import 'package:opinion/components/delete_button.dart';
 import 'package:opinion/components/like_button.dart';
 import 'package:opinion/helper/helper_methods.dart';
 
@@ -102,6 +103,50 @@ class _WallPostState extends State<WallPost> {
     );
   }
 
+  void deletePost() {
+    showDialog(
+      context: this.context,
+      builder: (context) => AlertDialog(
+        title: const Text("Delete Post"),
+        content: const Text("Are you sure you want to delete this video?"),
+        actions: [
+          TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text("Cancel")),
+
+          TextButton(
+              onPressed: () async {
+                final commentDocs = await FirebaseFirestore.instance
+                    .collection("User Posts")
+                    .doc(widget.postId)
+                    .collection("Comments")
+                    .get();
+
+                for (var doc in commentDocs.docs) {
+                  await FirebaseFirestore.instance
+                      .collection("User Posts")
+                      .doc(widget.postId)
+                      .collection("Comments")
+                      .doc(doc.id)
+                      .delete();
+                }
+
+                FirebaseFirestore.instance
+                    .collection("User Posts")
+                    .doc(widget.postId)
+                    .delete()
+                    .then((value) => print("post deleted"))
+                    .catchError(
+                        (error) => print("failed to delete post: $error"));
+
+                Navigator.pop(context);
+              },
+              child: const Text("Delete"))
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -112,27 +157,35 @@ class _WallPostState extends State<WallPost> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Column(
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(widget.message),
-              SizedBox(height: 10),
-              Row(
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    widget.user,
-                    style: TextStyle(color: Colors.grey[500]),
-                  ),
-                  Text(
-                    '.',
-                    style: TextStyle(color: Colors.grey[500]),
-                  ),
-                  Text(
-                    widget.time,
-                    style: TextStyle(color: Colors.grey[500]),
+                  Text(widget.message),
+                  SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Text(
+                        widget.user,
+                        style: TextStyle(color: Colors.grey[500]),
+                      ),
+                      Text(
+                        '.',
+                        style: TextStyle(color: Colors.grey[500]),
+                      ),
+                      Text(
+                        widget.time,
+                        style: TextStyle(color: Colors.grey[500]),
+                      ),
+                    ],
                   ),
                 ],
               ),
+              if (widget.user == currentUser.email)
+                DeleteButton(onTap: deletePost),
             ],
           ),
           const SizedBox(
